@@ -1,0 +1,21 @@
+{
+  "name": "build-helpers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jax",
+  "license": "ISC",
+  "dependencies": {
+    "archiver": "^5.3.1",
+    "axios": "^1.6.0",
+    "formdata-node": "^5.0.1",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^11.1.1",
+    "node-fetch": "^3.3.1",
+    "simple-git": "^3.20.0"
+  }
+}
