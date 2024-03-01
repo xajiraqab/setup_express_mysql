@@ -45,6 +45,30 @@ UpdaterRoutes.post(
       return
     }
 
+    // assets-ის წაშლა
+    const extensionsToRemove = [".js", ".css"]
+    const directoryPath = path.join(rootDir, "public", "assets")
+    fs.readdir(directoryPath, (err, files) => {
+      if (err) {
+        console.error("Error reading directory:", err)
+        return
+      }
+
+      files.forEach((file) => {
+        const filePath = path.join(directoryPath, file)
+        const fileExtension = path.extname(filePath)
+
+        if (extensionsToRemove.includes(fileExtension)) {
+          try {
+            fs.unlinkSync(filePath)
+          } catch (error) {
+            console.log(error)
+          }
+        }
+      })
+    })
+
+    // unzip
     await extract(path.join(uploadDir, "Build.zip"), { dir: uploadDir })
 
     fs.rmSync(uploadDir + "/Build.zip", { force: true, recursive: true })
