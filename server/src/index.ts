@@ -10,6 +10,14 @@ import UpdaterRoutes from "./routes/updater_routes"
 const app = express()
 const port = process.env.PORT || 5000
 
+app.get('/*', function (req: Request, res: Response, next: NextFunction) {
+  if (req.headers && req.headers.host && req.headers.host.match(/^www/) !== null) {
+    res.redirect('http://' + req.headers.host.replace(/^www\./, '') + req.url);
+  } else {
+    next();
+  }
+})
+
 app.use(express.static("public"))
 app.use(bodyParser.json())
 
@@ -22,8 +30,10 @@ app.get("*", (req: Request, res: Response) => {
   res.sendFile(__dirname + "/public/index.html")
 })
 
-;(async () => {
+async function main() {
   app.listen(port, () => {
     console.log(`Server is running on port ${port}`)
   })
-})()
+}
+
+main()
