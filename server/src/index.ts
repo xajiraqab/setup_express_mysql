@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000
 
 app.get('/*', function (req: Request, res: Response, next: NextFunction) {
   if (req.headers && req.headers.host && req.headers.host.match(/^www/) !== null) {
-    res.redirect('http://' + req.headers.host.replace(/^www\./, '') + req.url);
+    res.redirect('https://' + req.headers.host.replace(/^www\./, '') + req.url);
   } else {
     next();
   }
