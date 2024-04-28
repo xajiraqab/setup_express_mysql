@@ -6,6 +6,7 @@ import bodyParser from "body-parser"
 import ApiRoutes from "./routes/api_routes"
 import TestRoutes from "./routes/test_routes"
 import UpdaterRoutes from "./routes/updater_routes"
+import cors from "cors"
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -19,6 +20,7 @@ app.get('/*', function (req: Request, res: Response, next: NextFunction) {
 })
 
 app.use(express.static("public"))
+app.use(cors())
 app.use(bodyParser.json())
 
 app.use("/update_on_cpanel", UpdaterRoutes)
