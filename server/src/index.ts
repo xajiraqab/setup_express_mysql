@@ -1,7 +1,7 @@
 import env from "dotenv"
 env.config()
 
-import express, { Request, Response } from "express"
+import express, { Request, Response, NextFunction } from "express"
 import bodyParser from "body-parser"
 import ApiRoutes from "./routes/api_routes"
 import TestRoutes from "./routes/test_routes"
