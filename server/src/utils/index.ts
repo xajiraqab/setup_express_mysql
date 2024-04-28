@@ -2,7 +2,9 @@ import { Response } from "express"
 import Joi from "joi"
 import crypto from "crypto"
 import { deleteImage } from "./images_manip";
-
+import path from "path"
+import fs from "fs"
+import { v4 as uuidv4 } from 'uuid';
 
 function validateSchema(res: Response, schema: () => Joi.ObjectSchema<any>, data: any) {
   const { error }: { value: any; error: any } = schema().validate(data)
@@ -48,6 +50,45 @@ function sendRedirect(res: Response, url: string) {
   res.redirect(url)
 }
 
+function getPublicPath() {
+  if (process.env.NODE_ENV === "production") {
+    return path.join(__dirname, "..", "public")
+  } else {
+    return path.join(__dirname, "..", "..", "public")
+  }
+}
+
+function getRootFolder() {
+  if (process.env.NODE_ENV === "production") {
+    return path.join(__dirname, "..")
+  } else {
+    return path.join(__dirname, "..", "..")
+  }
+}
+
+function saveImageFromBase64(folder_name: string, image: string): string {
+  const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
+  const buffer = Buffer.from(base64Data, 'base64');
+  const fileName = `${uuidv4()}.png`
+
+  const folderPath = path.join(Utils.getPublicPath(), "images", folder_name)
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath)
+  }
+
+  fs.writeFileSync(path.join(folderPath, fileName), buffer, { encoding: 'base64' });
+  return fileName
+}
+
+function removeImage(folder_name: string, image: string): void {
+  const filePath = path.join(Utils.getPublicPath(), "images", folder_name, image)
+  if (fs.existsSync(filePath)) {
+    try {
+      fs.unlinkSync(filePath)
+    }
+    catch (error: any) { console.log(error) }
+  }
+}
 
 const Utils = {
   sendSuccess,
@@ -55,7 +96,11 @@ const Utils = {
   sendRedirect,
   validateSchema,
   getCryptoHash,
-  deleteImage: deleteImage
+  deleteImage: deleteImage,
+  getPublicPath,
+  getRootFolder,
+  saveImageFromBase64,
+  removeImage
 }
 
 
