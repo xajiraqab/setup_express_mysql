@@ -21,7 +21,7 @@ app.get('/*', function (req: Request, res: Response, next: NextFunction) {
 
 app.use(express.static("public"))
 app.use(cors())
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '10mb' }))
 
 app.use("/update_on_cpanel", UpdaterRoutes)
 app.use("/test", TestRoutes)
